@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">1feed</string>
+    <string name="first_name_label">First Name</string>
+    <string name="last_name_label">Last Name</string>
+    <string name="username_label">Username</string>
+    <string name="password_label">Password</string>
+    <string name="email_label">E-mail</string>
+    <string name="sign_in_button">Sign in</string>
+    <string name="sign_up_button">Sign up</string>
+    <string name="registration_success">Successfully Registered!</string>
+    <string name="about_1feed">News from all over the world inside of your pocket.</string>
+    <string name="continue_to_1feed">to continue to 1feed</string>
+    <string name="use_1feed">in order to use 1feed</string>
+    <string name="back_button">Back</string>
+    <string name="logo_content_description">1feed logo</string>
+    <string name="country_menu">Country</string>
+    <string name="home_menu">Home</string>
+    <string name="account_menu">Account</string>
+</resources>
