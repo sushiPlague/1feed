@@ -8,16 +8,16 @@
     tools:context=".ui.auth.GetStartedActivity2">
 
     <Button
-        android:id="@+id/startSignUpButton"
-        android:layout_width="match_parent"
+        android:id="@+id/buttonGetStarted"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginBottom="80dp"
-        android:background="@color/primary_blue_1feed"
+        android:background="@drawable/round_button_blue"
         android:padding="15dp"
         android:shadowRadius="15"
-        android:text="@string/sign_up_button"
+        android:text="@string/get_started"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -25,31 +25,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startSignInButton" />
-
-    <Button
-        android:id="@+id/startSignInButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="520dp"
-        android:layout_marginEnd="25dp"
-        android:background="@color/white"
-        android:fontFamily="sans-serif-medium"
-        android:shadowRadius="15"
-        android:text="@string/sign_in_button"
-        android:textColor="@color/dark_gray_1feed"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <ImageView
         android:id="@+id/imageView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
+        android:contentDescription="@string/logo_content_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

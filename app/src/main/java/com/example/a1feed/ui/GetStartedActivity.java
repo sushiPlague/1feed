@@ -1,4 +1,4 @@
-package com.example.a1feed.ui.auth;
+package com.example.a1feed.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,8 +11,7 @@ import com.example.a1feed.R;
 
 public class GetStartedActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button signInButton;
-    private Button signUpButton;
+    private Button buttonGetStarted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,24 +22,16 @@ public class GetStartedActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initComponents() {
-        signInButton = findViewById(R.id.startSignInButton);
-        signInButton.setOnClickListener(this);
-
-        signUpButton = findViewById(R.id.startSignUpButton);
-        signUpButton.setOnClickListener(this);
+        buttonGetStarted = findViewById(R.id.buttonGetStarted);
+        buttonGetStarted.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.startSignInButton:
-                Intent signInIntent = new Intent(this, SignInActivity.class);
-                startActivity(signInIntent);
-                finish();
-                break;
-            case R.id.startSignUpButton:
-                Intent signUpIntent = new Intent(this, SignUpActivity.class);
-                startActivity(signUpIntent);
+            case R.id.buttonGetStarted:
+                Intent countrySelection = new Intent(this, CountrySelectionActivity.class);
+                startActivity(countrySelection);
                 finish();
                 break;
             default:
