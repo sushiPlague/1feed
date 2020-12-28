@@ -1,5 +1,6 @@
 package com.example.a1feed.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,12 +11,13 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -32,11 +34,6 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,9 +44,11 @@ import java.util.Map;
  */
 public class NewsHomeFragment extends Fragment {
 
+    private OnNewsInteractionListener listener;
     private NewsViewModel viewModel;
     private LinearLayout mainLayout;
     private ProgressBar progressBar;
+    private SearchView searchNews;
 
     public NewsHomeFragment() {
         // Required empty public constructor
@@ -73,10 +72,31 @@ public class NewsHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_home, container, false);
 
+        mainLayout = v.findViewById(R.id.mainLayout);
+        progressBar = v.findViewById(R.id.progressBar);
+        searchNews = v.findViewById(R.id.searchNews);
+        searchNews.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query != "" || query != null) {
+                    search(query);
+                    return true;
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         viewModel = new ViewModelProvider(requireActivity()).get(NewsViewModel.class);
+
         fetchAllNews();
 
-        viewModel.getData().observe(getViewLifecycleOwner(), news -> {
+        viewModel.getNews().observe(getViewLifecycleOwner(), news -> {
             drawNews();
         });
 
@@ -84,9 +104,21 @@ public class NewsHomeFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mainLayout = view.findViewById(R.id.mainLayout);
-        progressBar = view.findViewById(R.id.progressBar);
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnNewsInteractionListener) {
+            listener = (OnNewsInteractionListener) context;
+        } else {
+            throw new RuntimeException(String.format("Interface not implemented in %s.", context.toString()));
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        listener = null;
     }
 
     private void fetchAllNews() {
@@ -98,7 +130,6 @@ public class NewsHomeFragment extends Fragment {
         Gson gson = new Gson();
 
         String url = String.format("https://newsapi.org/v2/top-headlines?country=%s&apiKey=fa9861a67e2d4a34aac625ad3257126a", countryCode);
-        System.out.println("URL JE OVO: " + url);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 (JSONObject response) -> {
@@ -130,7 +161,7 @@ public class NewsHomeFragment extends Fragment {
 
     private void fillNews(Article article, View view) {
         ImageView articleImage = view.findViewById(R.id.articleImage);
-        TextView articleTitle = view.findViewById(R.id.articleTitle);
+        TextView articleTitle = view.findViewById(R.id.labelNewsTitle);
 
         if (article.getUrlToImage() != null) {
             Picasso.get().load(article.getUrlToImage()).into(articleImage);
@@ -144,9 +175,63 @@ public class NewsHomeFragment extends Fragment {
     private void drawNews() {
         LayoutInflater inflater = getLayoutInflater();
 
-        for (Article article : viewModel.getData().getValue()) {
+        for (Article article : viewModel.getNews().getValue()) {
             View v = inflater.inflate(R.layout.article_layout, mainLayout, false);
+
+            v.setOnClickListener((View view) -> {
+                if (listener != null) {
+                    listener.articleSelected(article);
+                }
+            });
+
             fillNews(article, v);
         }
+    }
+
+    private void search(String searchBy) {
+        String countryCode = SharedPreferencesHandler.loadSharedPreferences(requireActivity());
+
+        RequestQueue queue = Volley.newRequestQueue(requireActivity());
+        Gson gson = new Gson();
+
+        String[] searchWords = searchBy.split(" ");
+        String formatted = null;
+
+        for (String word : searchWords) {
+            formatted.concat(String.format("%s&&", word));
+        }
+
+        String url = String.format("https://newsapi.org/v2/top-headlines?q=%s&country=%s&apiKey=fa9861a67e2d4a34aac625ad3257126a", formatted, countryCode);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                (JSONObject response) -> {
+                    News news = gson.fromJson(String.valueOf(response), News.class);
+                    viewModel.fetchData(news.getArticles());
+                },
+                (VolleyError error) -> {
+                    VolleyLog.d(error.toString());
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("User-Agent", "Mozilla/5.0");
+                return headers;
+            }
+        };
+
+        queue.add(request);
+
+        queue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<String>() {
+            @Override
+            public void onRequestFinished(Request<String> request) {
+                if (progressBar != null && progressBar.isShown()) {
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    public interface OnNewsInteractionListener {
+        void articleSelected(Article article);
     }
 }

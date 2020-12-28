@@ -4,13 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.a1feed.R;
+import com.example.a1feed.model.Article;
 import com.example.a1feed.model.NewsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NewsHomeFragment.OnNewsInteractionListener, ArticleFragment.OnFullNewsInteractionListener {
 
     private NewsViewModel viewModel;
     private BottomNavigationView bottomNavigationView;
@@ -41,10 +43,42 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                     return true;
+                case R.id.menu_home:
+                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+
+                    if (!(f instanceof NewsHomeFragment)) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .replace(R.id.fragment_container_view, NewsHomeFragment.class, null)
+                                .commit();
+                    }
+
+                    return true;
                 default:
                     return false;
             }
         });
     }
 
+    @Override
+    public void articleSelected(Article article) {
+        viewModel.selectArticle(article);
+
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container_view, ArticleFragment.class, null)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void showFullArticle(String articleURL) {
+        viewModel.setWebvArticleURL(articleURL);
+
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container_view, WebViewFragment.class, null)
+                .addToBackStack(null)
+                .commit();
+    }
 }

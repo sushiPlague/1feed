@@ -9,12 +9,14 @@ import java.util.List;
 public class NewsViewModel extends ViewModel {
 
     private MutableLiveData<List<Article>> articles;
-    private MutableLiveData<News> selectedArticle = new MutableLiveData<>();
+    private MutableLiveData<Article> selectedArticle = new MutableLiveData<>();
+    private MutableLiveData<String> webvArticleURL = new MutableLiveData<>();
 
-    public LiveData<List<Article>> getData() {
+    public LiveData<List<Article>> getNews() {
         if (articles == null) {
-            articles = new MutableLiveData<>();
+            articles = new MutableLiveData<List<Article>>();
         }
+
         return articles;
     }
 
@@ -22,11 +24,19 @@ public class NewsViewModel extends ViewModel {
         this.articles.setValue(fetchedArticles);
     }
 
-    public void selectData(News articleItem) {
-        this.selectedArticle.setValue(articleItem);
+    public void selectArticle(Article article) {
+        this.selectedArticle.setValue(article);
     }
 
-    public LiveData<News> getSelected() {
+    public LiveData<Article> getSelectedArticle() {
         return this.selectedArticle;
+    }
+
+    public MutableLiveData<String> getWebvArticleURL() {
+        return webvArticleURL;
+    }
+
+    public void setWebvArticleURL(String webvArticleURL) {
+        this.webvArticleURL.setValue(webvArticleURL);
     }
 }

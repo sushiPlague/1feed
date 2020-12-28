@@ -12,4 +12,5 @@
     <string name="select">Select</string>
     <string name="cancel">Cancel</string>
     <string name="country_dialog_info">In order to gather news that are most relevant to the geolocation of your interest, you will need to select a country.</string>
+    <string name="read_more">Read full story</string>
 </resources>
