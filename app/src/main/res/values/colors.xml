@@ -11,4 +11,5 @@
     <color name="light_blue_1feed">#658bf2</color>
     <color name="dark_blue_1feed">#00358e</color>
     <color name="dark_gray_1feed">#808183</color>
+    <color name="material_dark_1feed">#212121</color>
 </resources>

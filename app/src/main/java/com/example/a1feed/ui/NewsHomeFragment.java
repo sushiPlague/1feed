@@ -1,6 +1,7 @@
 package com.example.a1feed.ui;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -78,12 +79,13 @@ public class NewsHomeFragment extends Fragment {
         searchNews.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query != "" || query != null) {
+                if (query == "") {
+                    fetchAllNews();
+                } else {
                     search(query);
-                    return true;
                 }
 
-                return false;
+                return true;
             }
 
             @Override
@@ -173,6 +175,8 @@ public class NewsHomeFragment extends Fragment {
     }
 
     private void drawNews() {
+        mainLayout.removeAllViews();
+
         LayoutInflater inflater = getLayoutInflater();
 
         for (Article article : viewModel.getNews().getValue()) {
@@ -194,17 +198,11 @@ public class NewsHomeFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(requireActivity());
         Gson gson = new Gson();
 
-        String[] searchWords = searchBy.split(" ");
-        String formatted = null;
-
-        for (String word : searchWords) {
-            formatted.concat(String.format("%s&&", word));
-        }
-
-        String url = String.format("https://newsapi.org/v2/top-headlines?q=%s&country=%s&apiKey=fa9861a67e2d4a34aac625ad3257126a", formatted, countryCode);
+        String url = String.format("https://newsapi.org/v2/top-headlines?q=%s&country=%s&apiKey=fa9861a67e2d4a34aac625ad3257126a", searchBy.trim(), countryCode);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 (JSONObject response) -> {
+                    System.out.println("RADI HTTP URL: " + url + "\n");
                     News news = gson.fromJson(String.valueOf(response), News.class);
                     viewModel.fetchData(news.getArticles());
                 },

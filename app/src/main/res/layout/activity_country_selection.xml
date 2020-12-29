@@ -54,7 +54,7 @@
         android:id="@+id/textView"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_thin"
+        android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:text="@string/country_dialog_info"
         android:textColor="@color/white"

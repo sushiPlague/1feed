@@ -38,11 +38,6 @@ public class MainActivity extends AppCompatActivity implements NewsHomeFragment.
         bottomNavigationView = findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch(item.getItemId()) {
-                case R.id.menu_country:
-                    Intent intent = new Intent(this, CountrySelectionActivity.class);
-                    startActivity(intent);
-                    finish();
-                    return true;
                 case R.id.menu_home:
                     Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
 
@@ -53,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements NewsHomeFragment.
                                 .commit();
                     }
 
+                    return true;
+                case R.id.menu_country:
+                    Intent intent = new Intent(this, CountrySelectionActivity.class);
+                    startActivity(intent);
+                    finish();
                     return true;
                 default:
                     return false;

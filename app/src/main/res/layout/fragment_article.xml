@@ -8,9 +8,10 @@
     tools:context=".ui.ArticleFragment">
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonReadFull"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +40,7 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginBottom="15dp"
                 android:fontFamily="@font/roboto_bold"
-                android:textColor="@color/dark_gray_1feed"
+                android:textColor="@color/material_dark_1feed"
                 android:textSize="30sp" />
 
             <TextView
@@ -74,15 +75,21 @@
                 android:layout_marginBottom="16dp"
                 android:textSize="18sp" />
 
-            <Button
-                android:id="@+id/buttonReadFull"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/main_menu_selector"
-                android:text="@string/read_more"
-                android:textColor="@color/white" />
 
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/buttonReadFull"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/main_menu_selector"
+        android:text="@string/read_more"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
