@@ -202,7 +202,6 @@ public class NewsHomeFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 (JSONObject response) -> {
-                    System.out.println("RADI HTTP URL: " + url + "\n");
                     News news = gson.fromJson(String.valueOf(response), News.class);
                     viewModel.fetchData(news.getArticles());
                 },
