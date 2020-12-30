@@ -198,7 +198,7 @@ public class NewsHomeFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(requireActivity());
         Gson gson = new Gson();
 
-        String url = String.format("https://newsapi.org/v2/top-headlines?q=%s&country=%s&apiKey=fa9861a67e2d4a34aac625ad3257126a", searchBy.trim(), countryCode);
+        String url = String.format("https://newsapi.org/v2/everything?q=%s&sortBy=popularity&apiKey=fa9861a67e2d4a34aac625ad3257126a", searchBy.trim());
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 (JSONObject response) -> {
